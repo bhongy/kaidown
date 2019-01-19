@@ -7,22 +7,24 @@ import compile from './compiler';
 const ROOT_DIR = path.resolve(__dirname, '..');
 const STATIC_DIR = path.resolve(ROOT_DIR, 'static');
 const HOMEPAGE_HTML = path.resolve(STATIC_DIR, 'homepage.html');
+const APP_DIR = path.resolve(ROOT_DIR, 'app');
 
 const Homepage = {
   path: '/',
+  entry: path.resolve(APP_DIR, 'Homepage.js'),
   bodyStream() {
     return fs.createReadStream(HOMEPAGE_HTML);
   },
 };
 
 const app = http.createServer(async function handleRequest(req, res) {
-  const { url } = req;
+  const { url = '' } = req;
   console.log(`[handle request] path: ${url}`);
 
-  if (url === '/dist/client.js') {
-    const CLIENT_FILENAME = path.resolve(ROOT_DIR, 'dist', 'client.js');
+  if (url.endsWith('client.js')) {
+    const CLIENT_FILENAME = path.resolve(ROOT_DIR, 'dist', 'Homepage-client.js');
     try {
-      const { startTime, endTime } = await compile();
+      const { startTime, endTime } = await compile('Homepage');
       const dur = endTime - startTime;
       console.log(`compilation successful (${dur}ms)`);
       fs.createReadStream(CLIENT_FILENAME).pipe(res);

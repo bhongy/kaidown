@@ -1,16 +1,15 @@
 import * as path from 'path';
-// import { promisify } from 'util';
 import * as webpack from 'webpack';
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const APP_DIR = path.resolve(ROOT_DIR, 'app');
-
-const webpackConfig = {
+const webpackConfig = (page: string): webpack.Configuration => ({
+  name: 'client',
   mode: 'development',
-  entry: path.resolve(APP_DIR, 'Homepage.js'),
+  entry: path.resolve(APP_DIR, page),
   output: {
     path: path.resolve(ROOT_DIR, 'dist'),
-    filename: 'client.js',
+    filename: `${page}-client.js`,
   },
   module: {
     rules: [
@@ -28,18 +27,16 @@ const webpackConfig = {
       },
     ],
   },
-};
+});
 
 type WebpackCompilationStats = {
-  startTime: number,
-  endTime: number,
+  startTime: number;
+  endTime: number;
 };
 
-const compiler = webpack(webpackConfig);
-// const compile = promisify(compiler.run.bind(compiler));
-const compile = async (): Promise<WebpackCompilationStats> => {
+const compile = async (page: string): Promise<WebpackCompilationStats> => {
   return new Promise((resolve, reject) => {
-    compiler.run((err: Error, stats: any) => {
+    webpack(webpackConfig(page), (err: Error, stats: any) => {
       if (err) {
         reject(err);
       } else {
