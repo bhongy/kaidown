@@ -10,12 +10,12 @@ module.exports = {
 
   entry: path.resolve(__dirname, '../server/render.js'),
   output: {
-    // REQUIRED: Makes sure to expose ../server/render.js middleware on
-    // module.exports so that webpackHotServerMiddleware can call it.
-    libraryTarget: 'commonjs2'
+    path: path.resolve(__dirname, '../dist/server'),
+    // expose the returned factory from render.js (bundled) via module.exports
+    // so that index.js (currently, webpackHotServerMiddleware) can "require" it
+    libraryTarget: 'commonjs2',
   },
 
-  devtool: 'cheap-module-eval-source-map',
   module: {
     rules: [
       {
@@ -25,8 +25,11 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             babelrc: false,
-            // cacheDirectory: !production,
-            presets: ['@babel/preset-env', '@babel/preset-react'],
+            presets: [
+              ['@babel/preset-env', { targets: { node: '8' } }],
+              '@babel/preset-react',
+            ],
+            plugins: ['@babel/plugin-syntax-dynamic-import'],
           },
         },
       },
