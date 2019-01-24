@@ -27,6 +27,8 @@ module.exports = {
           options: {
             babelrc: false,
             presets: ['@babel/preset-env', '@babel/preset-react'],
+            // allows babel to transpile `import()` syntax
+            // primarily use for webpack code splitting
             plugins: ['@babel/plugin-syntax-dynamic-import'],
           },
         },
