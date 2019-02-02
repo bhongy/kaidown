@@ -8,24 +8,30 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import App from '../src/components/App.js';
 
-function render(req, res) {
-  res.statusCode = 200;
-  res.write(
-    `<!DOCTYPE html>
-    <html>
-    <head>
-      <title>App</title>
-    </head>
-    <body>
-      <div id="root">${renderToString(<App />)}</div>
-      <script src="/static/main.js"></script>
-    </body>
-    </html>`
-  );
-  res.end();
-}
-
+// `clientStats` is already the `.toJson`ed version
 export default ({ clientStats }) => {
-  // debugger;
-  return render;
+  // console.log(clientStats);
+  const { publicPath } = clientStats
+  const { assets } = clientStats.entrypoints.main;
+  const assetsScripts = assets.map(name => `<script src="${publicPath}${name}"></script>`);
+  // render is different for each compilation (different stats)
+  // in dev this changes anytime we rebuild client bundle
+  // in prod this change per build and we create the closure only once at runtime
+  return function render(req, res) {
+    console.log(`render request: ${req.url}`);
+    res.statusCode = 200;
+    res.write(
+      `<!DOCTYPE html>
+      <html>
+      <head>
+        <title>App</title>
+      </head>
+      <body>
+        <div id="root">${renderToString(<App />)}</div>
+        ${assetsScripts.join('')}
+      </body>
+      </html>`
+    );
+    res.end();
+  };
 };

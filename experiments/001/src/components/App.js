@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from './Header';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -33,16 +34,16 @@ export default class App extends React.Component {
   render() {
     return (
       <div>
+        <Header content={this.state.greeting} />
+        <div>
+          <button onClick={() => this._loadLocale('en-US')}>en-US</button>
+          <button onClick={() => this._loadLocale('de-DE')}>de-DE</button>
+        </div>
+
         <p>{this.state.selected}</p>
         <button onClick={() => this._selectTab('Home')}>Home</button>
         <button onClick={() => this._selectTab('Foo')}>Foo</button>
         <button onClick={() => this._selectTab('Bar')}>Bar</button>
-
-        <div>
-          <p>{this.state.greeting}</p>
-          <button onClick={() => this._loadLocale('en-US')}>en-US</button>
-          <button onClick={() => this._loadLocale('de-DE')}>de-DE</button>
-        </div>
       </div>
     );
   }
