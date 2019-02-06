@@ -7,6 +7,8 @@ module.exports = {
   name: 'client',
   mode: 'development',
   target: 'web',
+  // add sourcemap support to debug in IDE (e.g. vscode)
+  devtool: 'cheap-module-eval-source-map',
 
   entry: path.resolve(__dirname, '../src/clientEntry.js'),
   output: {

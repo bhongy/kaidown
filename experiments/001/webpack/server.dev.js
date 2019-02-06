@@ -7,6 +7,8 @@ module.exports = {
   name: 'server',
   mode: 'development',
   target: 'node',
+  // add sourcemap support to debug in IDE (e.g. vscode)
+  devtool: 'cheap-module-eval-source-map',
 
   entry: path.resolve(__dirname, '../server/render.js'),
   output: {
