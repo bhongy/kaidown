@@ -55,10 +55,13 @@ emit -> afterEmit -> done
 {
   "type": "node",
   "request": "launch",
-  "name": "Debug experiment 001",
+  "name": "Debug experiment 001 (Server)",
   "program": "${workspaceFolder}/server/index.js",
-  "cwd": "${workspaceFolder}/"
+  "cwd": "${workspaceFolder}/",
+  "sourceMaps": true
 }
 ```
 
-- this launch debugging session on the runtime node server that uses the bundled server/render.js - I haven't figured out how to get debugging source map to work to the source server/render.js
+- this launch debugging session on the runtime node server that uses the bundled server/render.js
+- with `"sourceMaps": true` and `webpackServerConfig.devtool` sets, it also supports debugging in the source code of server bundle (like `server/render.js`)
+- I haven't figured out how to debug the client bundle

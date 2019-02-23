@@ -10,7 +10,10 @@ module.exports = {
   // add sourcemap support to debug in IDE (e.g. vscode)
   devtool: 'cheap-module-eval-source-map',
 
-  entry: path.resolve(__dirname, '../src/clientEntry.js'),
+  entry: {
+    main: path.resolve(__dirname, '../src/clientEntry.js'),
+    about: path.resolve(__dirname, '../src/about.js'),
+  },
   output: {
     path: path.resolve(__dirname, '../dist/client'),
     filename: '[name]-[contenthash].js',
@@ -55,6 +58,11 @@ module.exports = {
       cacheGroups: {
         // this is how you disable default cacheGroup
         default: false,
+        react: {
+          test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+          name: 'react',
+          chunks: 'all',
+        },
         // Create a `common` chunk, which includes all code shared between entrypoints.
         common: {
           name: 'common',

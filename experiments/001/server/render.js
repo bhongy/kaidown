@@ -12,6 +12,7 @@ import App from '../src/components/App.js';
 export default ({ clientStats }) => {
   // console.log(clientStats);
   const { publicPath } = clientStats
+  // https://github.com/webpack/webpack/issues/6598#issuecomment-368849553
   const { assets } = clientStats.entrypoints.main;
   const assetsScripts = assets.map(name => `<script src="${publicPath}${name}"></script>`);
   // render is different for each compilation (different stats)

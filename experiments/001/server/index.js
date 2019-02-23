@@ -7,24 +7,28 @@ const webpackHotServerMiddleware = require('webpack-hot-server-middleware');
 const webpackClientConfig = require('../webpack/client.dev');
 const webpackServerConfig = require('../webpack/server.dev');
 
-const compiler = webpack([webpackClientConfig, webpackServerConfig]);
+const multiCompiler = webpack([webpackClientConfig, webpackServerConfig]);
 const app = express();
 
-compiler.hooks.done.tap('debug stats', multiStats => {
+multiCompiler.hooks.done.tap('debug stats', multiStats => {
   const { stats, hash } = multiStats;
   const [clientStats, serverStats] = stats;
   console.log('============ done ===========');
 });
 
 app.use(
-  webpackDevMiddleware(compiler, {
-    publicPath: webpackClientConfig.output.publicPath,
+  webpackDevMiddleware(multiCompiler, {
     stats: { colors: true },
     writeToDisk: true,
   })
 );
 
-app.use(webpackHotServerMiddleware(compiler));
+// const [clientCompiler] = multiCompiler.compilers;
+// app.use(webpackHotMiddleware(clientCompiler));
+
+// needs to be mounted immediately after webpack-dev-middleware
+// and webpack-hot-middleware < so client hmr requests are handled correctly
+app.use(webpackHotServerMiddleware(multiCompiler));
 
 app.listen(3000, () => {
   console.log('DevServer is listening on port: 3000');

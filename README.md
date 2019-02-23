@@ -1,5 +1,7 @@
 # Kaidown ไข่ดาว
 
+Support Node 8 (lts/carbon) or above.
+
 ## Current workflow
 
 - `yarn`
